@@ -13,4 +13,12 @@ import java.util.List;
 @AllArgsConstructor
 public class CartModel {
     private List<ItemModel> itemList;
+
+    public List<ItemModel> getItemList() {
+        return itemList;
+    }
+
+    public void setItemList(List<ItemModel> itemList) {
+        this.itemList = itemList;
+    }
 }
