@@ -16,6 +16,6 @@ public class OrderModel {
     @Id
     private String orderId;
 
-    private List<String> items;
+    private List<ItemModel> items;
 
 }

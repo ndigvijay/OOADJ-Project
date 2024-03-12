@@ -16,6 +16,8 @@ public class ItemModel {
 
     private String name;
 
+    public String image;
+
     private float price;
 
     private String category;

@@ -1,12 +1,16 @@
 package com.nihal.demo.Controllers;
 
+import com.nihal.demo.Models.CartModel;
 import com.nihal.demo.Models.ItemModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.nihal.demo.Services.CartService;
 
-@RestController
+import java.util.List;
+
+@Controller
 @RequestMapping("/cart")
 public class CartController {
     @Autowired
@@ -49,7 +53,13 @@ public class CartController {
     }
 
     @GetMapping("/view")
-    public ResponseEntity<String> viewCart() {
-        return ResponseEntity.ok(String.valueOf(cartService.viewCart()));
+    public ResponseEntity<CartModel> viewCart() {
+        CartModel cart=cartService.viewCart();
+        return ResponseEntity.ok().body(cart);
+    }
+
+    @GetMapping("/mycart")
+    public String cart() {
+        return "cart";
     }
 }
