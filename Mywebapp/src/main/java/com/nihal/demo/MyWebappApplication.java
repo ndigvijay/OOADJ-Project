@@ -10,5 +10,4 @@ public class MyWebappApplication {
 		SpringApplication.run(MyWebappApplication.class, args);
 		System.out.println("server is running");
 	}
-
 }
