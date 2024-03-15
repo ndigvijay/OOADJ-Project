@@ -1,22 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Cart</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .heading {
+            text-align: center;
+            color: #333;
+        }
+
         .card {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin: 10px;
-            width: 200px;
-            display: inline-block;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .card p {
+            margin: 5px 0;
+            font-size: 0.9em;
+            color: #666;
         }
     </style>
 </head>
 <body>
-    <div>
-        <h1>Cart Items:</h1>
+    <div class="container">
+        <h1 class="heading">Your Cart</h1>
         <div id="cartContainer">
             <!-- Cards will be appended here -->
         </div>
@@ -58,6 +97,5 @@
         // Call getCart() after the DOM has fully loaded
         window.onload = getCart;
     </script>
-
 </body>
 </html>
