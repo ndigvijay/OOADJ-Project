@@ -27,7 +27,7 @@
         }
         .featured-items {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
@@ -46,7 +46,22 @@
             bottom: 0;
             width: 100%;
         }
+        .add_cart_button {
+            display: inline-block;
+            background-color: blue;
+            color: white;
+            font-weight: bold;
+            padding: 10px;
+            margin:10px;
+            border-radius: 10px;
+        }
     </style>
+
+    <script>
+        function demo(e) {
+            console.log(e);
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -61,14 +76,17 @@
             <div class="featured-item">
                 <h3>Japanese Breakfast Set</h3>
                 <p>Enjoy a traditional Japanese breakfast with miso soup, grilled fish, rice, and pickles.</p>
+                <button class="add_cart_button" onclick="demo(this.value)" value="Japanese Breakfast">Add to Cart</button>
             </div>
             <div class="featured-item">
                 <h3>Pancakes & Fresh Berries</h3>
                 <p>Indulge in fluffy pancakes topped with a generous serving of fresh berries and maple syrup.</p>
+                <button class="add_cart_button" onclick="demo(this.value)" value="Pancakes & Fresh Berries">Add to Cart</button>
             </div>
             <div class="featured-item">
                 <h3>Avocado Toast</h3>
                 <p>Start your day with a healthy and delicious avocado toast topped with cherry tomatoes and feta cheese.</p>
+                <button class="add_cart_button" onclick="demo(this.value)" value="Avocado Toast">Add to Cart</button>
             </div>
             <!-- Add more featured items as needed -->
         </div>

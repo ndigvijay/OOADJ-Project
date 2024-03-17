@@ -27,6 +27,8 @@
         }
 
         .card {
+            width: 400px;
+            height: 200px;
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 15px;
@@ -50,6 +52,37 @@
             margin: 5px 0;
             font-size: 0.9em;
             color: #666;
+        }
+        .right img {
+            display: inline-block;
+            float: right;
+            width: 200px;
+            height: 200px;
+        }
+        .left {
+            display: inline-block;
+        }
+        .card {
+            display: flex;
+            width: 750px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .left {
+            flex: 1;
+            padding: 15px;
+        }
+
+        .right img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
         }
     </style>
 </head>
@@ -79,10 +112,14 @@
                     console.log(item.name);
                     return `
                         <div class="card">
-                            <h2>\${item.name}</h2>
-                            <p>ID: \${item.id}</p>
-                            <p>Price: \$\${item.price.toFixed(2)}</p>
-                            <p>Quantity: \${item.quantity}</p>
+                            <div class="left">
+                                <h2>\${item.name}</h2>
+                                <p>Price: \$\${item.price.toFixed(2)}</p>
+                                <p>Quantity: \${item.quantity}</p>
+                            </div>
+                            <div class="right">
+                                <img src="${pageContext.request.contextPath}/Files/\${item.image}" alt="\${item.name} Image">
+                            </div>
                         </div>
                     `;
                 }).join(''); // Join the array of HTML strings into a single string

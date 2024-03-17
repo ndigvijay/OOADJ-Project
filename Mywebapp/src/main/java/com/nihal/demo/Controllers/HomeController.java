@@ -20,6 +20,6 @@ public class HomeController {
 
     @GetMapping("/menu/jp")
     public String JP_Menu() {
-        return "japanese.jsp";
+        return "japanese";
     }
 }
