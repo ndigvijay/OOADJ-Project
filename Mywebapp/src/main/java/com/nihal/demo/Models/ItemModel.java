@@ -25,3 +25,5 @@ public class ItemModel {
     public int quantity;
 
 }
+
+//extends this class to a ineterface for repository
