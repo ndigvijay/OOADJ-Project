@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ItemModel {
     @Id
     private int id;
-
+    // todo: remove id
     private String name;
 
     public String image;
@@ -25,3 +25,5 @@ public class ItemModel {
     public int quantity;
 
 }
+
+//extends this class to a ineterface for repository

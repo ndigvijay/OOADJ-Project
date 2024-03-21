@@ -11,6 +11,10 @@
 	<groupId>com.example</groupId>
 	<artifactId>Mywebapp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<modules>
+		<module>demo</module>
+	</modules>
 	<name>webapp</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
