@@ -29,4 +29,15 @@ public class AdminService {
         // Check if an item with the same name already exists
         return itemRepository.existsByName(itemName);
     }
+    public void updateItem(ItemModel updatedItem) {
+        itemRepository.save(updatedItem);
+    }
+
+    public ItemModel getItemById(ObjectId itemId) {
+        return itemRepository.findById(itemId).orElse(null);
+    }
+
+    public boolean isItemExistsById(ObjectId itemId) {
+        return itemRepository.existsById(itemId);
+    }
 }

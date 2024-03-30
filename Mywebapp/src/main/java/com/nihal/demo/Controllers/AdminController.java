@@ -48,4 +48,42 @@ public class AdminController {
         List<ItemModel> items = adminService.getAllItems();
         return ResponseEntity.ok().body(items);
     }
+    @PutMapping("/update-item/{itemId}")
+    public ResponseEntity<String> updateItem(@PathVariable ObjectId itemId, @RequestBody ItemModel updatedItem) {
+        try {
+            if (!adminService.isItemExistsById(itemId)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found!");
+            }
+            updatedItem.setId(itemId.toString());
+            adminService.updateItem(updatedItem);
+            return ResponseEntity.ok("Item updated successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/get-item/{itemId}")
+    public ResponseEntity<ItemModel> getItem(@PathVariable ObjectId itemId) {
+        try {
+            ItemModel item = adminService.getItemById(itemId);
+            if (item != null) {
+                return ResponseEntity.ok().body(item);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            // Create an ItemModel object with the error message
+            ItemModel errorItem = new ItemModel();
+            errorItem.setName("Error");
+            errorItem.setImage("Error");
+            errorItem.setPrice(0.0f);
+            errorItem.setCategory("Error");
+            errorItem.setQuantity(0);
+            errorItem.setId("Error");
+
+            // Return the error message within the ItemModel object
+            return ResponseEntity.internalServerError().body(errorItem);
+        }
+    }
+
 }
