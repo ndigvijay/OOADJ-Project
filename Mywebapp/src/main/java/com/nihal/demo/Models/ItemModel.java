@@ -6,13 +6,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 @Data
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemModel {
-    @Id
-    private int id;
+    private String id;
 
     private String name;
 
@@ -23,5 +20,5 @@ public class ItemModel {
     private String category;
 
     public int quantity;
-
 }
+
