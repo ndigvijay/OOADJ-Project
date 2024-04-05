@@ -7,4 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface ItemRepository extends MongoRepository<ItemModel, ObjectId> {
     boolean existsByName(String itemName);
+    ItemModel getItemByName(String itemName);
 }

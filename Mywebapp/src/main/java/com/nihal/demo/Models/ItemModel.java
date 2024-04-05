@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemModel {
+public class ItemModel implements Cloneable {
     private String id;
 
     private String name;
@@ -20,5 +20,13 @@ public class ItemModel {
     private String category;
 
     public int quantity;
+
+    ItemModel(String Name, int Quantity){
+        this.name=Name;
+        this.quantity=Quantity;
+    }
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }
 
