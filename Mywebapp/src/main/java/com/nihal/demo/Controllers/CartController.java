@@ -1,7 +1,9 @@
 package com.nihal.demo.Controllers;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.nihal.demo.Models.CartModel;
 import com.nihal.demo.Models.ItemModel;
+import org.bson.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,12 +19,15 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping("/add")
-    public ResponseEntity<String> addItemToCart(@RequestBody ItemModel item) {
+    public ResponseEntity<String> addItemToCart(@RequestBody ItemModel request) {
         try {
-            if(item.quantity == 0) {
-                cartService.removeItemFromCart(item.getId());
+            String itemName = request.getName();
+            int quantity = request.getQuantity();
+
+            if(quantity == 0) {
+                cartService.removeItemFromCart(itemName);
             }
-            cartService.addItemToCart(item);
+            cartService.addItemToCart(itemName, quantity);
             return ResponseEntity.ok("Item added successfully!");
         }
         catch(Exception e) {
@@ -30,10 +35,10 @@ public class CartController {
         }
     }
 
-    @PatchMapping("/update-quantity/{itemId}")
-    public ResponseEntity<String> updateQuantity(@PathVariable String itemId, @RequestParam int quantityChange) {
+    @PatchMapping("/update-quantity/{itemName}")
+    public ResponseEntity<String> updateQuantity(@PathVariable String itemName, @RequestParam int quantityChange) {
         try {
-            cartService.updateQuantity(itemId, quantityChange);
+            cartService.updateQuantity(itemName, quantityChange);
             return ResponseEntity.ok("Quantity updated successfully!");
         }
         catch(Exception e) {
@@ -41,10 +46,10 @@ public class CartController {
         }
     }
 
-    @DeleteMapping("/remove/{itemId}")
-    public ResponseEntity<String> removeItemFromCart(@PathVariable String itemId) {
+    @DeleteMapping("/remove/{itemName}")
+    public ResponseEntity<String> removeItemFromCart(@PathVariable String itemName) {
         try {
-            cartService.removeItemFromCart(itemId);
+            cartService.removeItemFromCart(itemName);
             return ResponseEntity.ok("Item removed successfully!");
         }
         catch(Exception e) {
