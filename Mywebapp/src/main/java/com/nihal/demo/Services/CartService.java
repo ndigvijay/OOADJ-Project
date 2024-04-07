@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 public class CartService {
-    private final CartModel cart = new CartModel();
+    public final CartModel cart = new CartModel();
     @Autowired
     private ItemRepository itemRepo;
     private Optional<ItemModel> findItemByName(String ItemName) {
