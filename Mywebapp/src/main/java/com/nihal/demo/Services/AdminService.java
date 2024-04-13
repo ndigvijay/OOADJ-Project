@@ -37,7 +37,7 @@ public class AdminService {
         return itemRepository.findById(itemId).orElse(null);
     }
 
-    public boolean isItemExistsById(ObjectId itemId) {
-        return itemRepository.existsById(itemId);
+    public boolean isItemExistsById(String itemId) {
+        return itemRepository.existsById(new ObjectId(itemId));
     }
 }

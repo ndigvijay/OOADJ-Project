@@ -79,7 +79,7 @@
             <label for="itemQuantity">Quantity:</label>
             <input type="number" id="itemQuantity" name="itemQuantity" required>
         </div>
-        <input type="submit" onclick="addItem(event)">Add Item</input>
+        <button  onclick="addItem(event)">Add Item</button>
     </form>
 
     <!-- Edit Item -->
@@ -110,7 +110,7 @@
             <label for="newItemQuantity">New Quantity:</label>
             <input type="number" id="newItemQuantity" name="newItemQuantity">
         </div>
-        <input type="submit" onclick="updateItem(event)">Update Item</input>
+        <button  onclick="updateItem(event)">Update Item</button>
     </form>
 
     <!-- Remove Item -->
@@ -187,7 +187,9 @@
             itemPrice: parseFloat(document.getElementById('itemPrice').value),
             itemCategory: document.getElementById('itemCategory').value,
             itemQuantity: parseInt(document.getElementById('itemQuantity').value)
+
         };
+        // alert(formData.itemImage,formData.itemCategory,formData.itemPrice,formData.itemQuantity)
         fetch('/admin/add-item', {
             method: 'POST',
             headers: {
@@ -215,22 +217,29 @@
     function updateItem(event) {
         event.preventDefault();
         const itemId = document.getElementById('updateItemId').value;
+        console.log(itemId)
         const formData = {
-            // Populate with updated item fields
+            itemName: document.getElementById('itemName').value,
+            itemImage: document.getElementById('itemImage').value,
+            itemPrice: parseFloat(document.getElementById('itemPrice').value),
+            itemCategory: document.getElementById('itemCategory').value,
+            itemQuantity: parseInt(document.getElementById('itemQuantity').value)
         };
-        fetch(`/admin/update-item/\${itemId}`, {
+        fetch(`/admin/update-item?itemId=${itemId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(formData)
         })
-            .then(response => {
+
+                .then(response => {
                 if (response.ok) {
                     alert('Item updated successfully');
                     document.getElementById('updateItemForm').reset();
                 } else {
                     response.json().then(data => {
+                        alert(response.status)
                         alert('Error: ' + data);
                     });
                 }
