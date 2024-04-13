@@ -79,7 +79,7 @@
             <label for="itemQuantity">Quantity:</label>
             <input type="number" id="itemQuantity" name="itemQuantity" required>
         </div>
-        <input type="submit" onclick="addItem(event)">Add Item</input>
+        <button  onclick="addItem(event)">Add Item</button>
     </form>
 
     <!-- Edit Item -->
@@ -110,7 +110,7 @@
             <label for="newItemQuantity">New Quantity:</label>
             <input type="number" id="newItemQuantity" name="newItemQuantity">
         </div>
-        <input type="submit" onclick="updateItem(event)">Update Item</input>
+        <button  onclick="updateItem()">Update Item</button>
     </form>
 
     <!-- Remove Item -->
@@ -151,7 +151,7 @@
 
     // Function to view all items
     function viewItems() {
-        fetch('/admin/view-items')
+        fetch('<%= request.getContextPath() %>/admin/view-items')
             .then(response => {
                 if (response.ok) {
                     response.json().then(items => {
@@ -182,13 +182,15 @@
     function addItem(event) {
         event.preventDefault();
         const formData = {
-            itemName: document.getElementById('itemName').value,
-            itemImage: document.getElementById('itemImage').value,
-            itemPrice: parseFloat(document.getElementById('itemPrice').value),
-            itemCategory: document.getElementById('itemCategory').value,
-            itemQuantity: parseInt(document.getElementById('itemQuantity').value)
+            name: document.getElementById('itemName').value,
+            image: document.getElementById('itemImage').value,
+            price: parseFloat(document.getElementById('itemPrice').value),
+            category: document.getElementById('itemCategory').value,
+            quantity: parseInt(document.getElementById('itemQuantity').value)
+
         };
-        fetch('/admin/add-item', {
+        // alert(formData.itemImage,formData.itemCategory,formData.itemPrice,formData.itemQuantity)
+        fetch('<%= request.getContextPath() %>/admin/add-item', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -212,25 +214,33 @@
     }
 
     // Update Item
-    function updateItem(event) {
+    function updateItem() {
         event.preventDefault();
         const itemId = document.getElementById('updateItemId').value;
+        console.log(itemId)
         const formData = {
-            // Populate with updated item fields
+            name: document.getElementById('newItemName').value,
+            image: document.getElementById('newItemImage').value,
+            price: parseFloat(document.getElementById('newItemPrice').value),
+            category: document.getElementById('newItemCategory').value,
+            quantity: parseInt(document.getElementById('newItemQuantity').value)
         };
-        fetch(`/admin/update-item/\${itemId}`, {
+        console.log(formData);
+        fetch("<%= request.getContextPath() %>/admin/update-item?itemId="+itemId, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(formData)
         })
+
             .then(response => {
                 if (response.ok) {
                     alert('Item updated successfully');
                     document.getElementById('updateItemForm').reset();
                 } else {
                     response.json().then(data => {
+                        alert(response.status)
                         alert('Error: ' + data);
                     });
                 }
