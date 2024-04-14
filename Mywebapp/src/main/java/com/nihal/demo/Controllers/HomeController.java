@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping
 public class HomeController {
-    @GetMapping("/home")
+    @GetMapping("/")
     public String Home() {
         return "home";
     }
@@ -16,10 +16,5 @@ public class HomeController {
     @GetMapping("/menu")
     public String Menu() {
         return "menu";
-    }
-
-    @GetMapping("/menu/jp")
-    public String JP_Menu() {
-        return "japanese";
     }
 }
