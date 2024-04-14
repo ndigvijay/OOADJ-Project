@@ -5,17 +5,20 @@
     <meta charset="UTF-8">
     <title>Admin Operations</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9; /* Added background color */
+        }
         .card {
             border: 1px solid #ccc;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             padding: 20px;
-            width: 900px;
+            max-width: 800px; /* Updated max-width */
             margin: 20px auto;
-            background-color: #f9f9f9;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            grid-column-gap: 20px;
+            background-color: #fff; /* Updated background color */
         }
         .form-group {
             margin-bottom: 15px;
@@ -33,17 +36,20 @@
             box-sizing: border-box;
             margin-bottom: 8px; /* Added margin between input fields and buttons */
         }
-        button[type="submit"] {
+        button[type="submit"],
+        button {
             width: calc(100% - 16px); /* Adjusted width to accommodate padding */
             padding: 10px;
             border: none;
             border-radius: 3px;
-            background-color: #007bff;
-            color: #fff;
+            background-color: #f2c94c; /* Updated button color */
+            color: #333;
             cursor: pointer;
+            transition: background-color 0.3s ease; /* Added transition effect */
         }
-        button[type="submit"]:hover {
-            background-color: #0056b3;
+        button[type="submit"]:hover,
+        button:hover {
+            background-color: #ab8511;
         }
         .item-list {
             list-style-type: none;
@@ -51,6 +57,25 @@
         }
         .item-list li {
             margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2c94c;
+            color: #333;
+        }
+        tr:nth-child(even) {
+            background-color: #ffffcc;
+        }
+        tr:nth-child(odd) {
+            background-color: #ffffff;
         }
     </style>
 </head>
@@ -120,13 +145,28 @@
             <label for="removeItemId">ID:</label>
             <input type="text" id="removeItemId" name="removeItemId" required>
         </div>
-        <input type="submit" onclick="removeItem(event)">Remove Item</input>
+        <button  onclick="removeItem(event)">Remove Item</button>
     </form>
 
     <!-- View All Items -->
     <div id="viewItemForm" class="form-group" onclick="viewItems()">
         <h2>View All Items</h2>
         <button type="button">View Items</button>
+
+        <!-- List to display all items -->
+<%--        <ul id="itemList" class="item-list" style="grid-column: span 5;"></ul>--%>
+        <table id="itemTable">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>Quantity</th>
+            </tr>
+            </thead>
+            <tbody id="itemList"></tbody>
+        </table>
     </div>
 
     <!-- Get Item -->
@@ -136,12 +176,10 @@
             <label for="getItemId">ID:</label>
             <input type="text" id="getItemId" name="getItemId" required>
         </div>
-        <input type="submit" onclick="getItem(event)">Get Item</input>
+        <button   onclick="getItem(event)">Get Item</button>
         <div id="itemDetails"></div>
     </form>
 
-    <!-- List to display all items -->
-    <ul id="itemList" class="item-list" style="grid-column: span 5;"></ul>
 
 
 </div>
@@ -170,11 +208,17 @@
     // Function to display items in the list
     function displayItems(items) {
         const itemList = document.getElementById('itemList');
-        itemList.innerHTML = ''; // Clear previous items
-        items.forEach(item => {
-            const li = document.createElement('li');
-            li.textContent = ` ID :\${item.id}, Name: \${item.name}, Price: \${item.price}, Category: \${item.category}, Quantity: \${item.quantity}`;
-            itemList.appendChild(li);
+        itemList.innerHTML = '';
+        items.forEach((item, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>\${item.id}</td>
+                <td>\${item.name}</td>
+                <td>\${item.price}</td>
+                <td>\${item.category}</td>
+                <td>\${item.quantity}</td>
+            `;
+            itemList.appendChild(row);
         });
     }
 
