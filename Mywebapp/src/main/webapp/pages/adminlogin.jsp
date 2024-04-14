@@ -78,6 +78,7 @@
             .then(response => {
                 if (response.ok) {
                     alert('Login successful');
+                    window.location.href = "/admin/operations"
                 } else {
                     alert('Error: ' + response.statusText);
                 }

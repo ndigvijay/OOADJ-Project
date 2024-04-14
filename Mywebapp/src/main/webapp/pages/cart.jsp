@@ -55,7 +55,6 @@
         }
         .right img {
             display: inline-block;
-            float: right;
             width: 200px;
             height: 200px;
         }
@@ -84,17 +83,68 @@
             border-top-right-radius: 8px;
             border-bottom-right-radius: 8px;
         }
+        .quantity-manager {
+            display: flex;
+        }
+        #placeorder {
+            margin-left: 45%;
+            margin-top: 20px;
+            background-color: blue;
+            color: white;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        #backToMenu {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <p id="backToMenu" onclick="window.location.href = '/menu'">&lt; Back to Menu</p>
         <h1 class="heading">Your Cart</h1>
         <div id="cartContainer">
             <!-- Cards will be appended here -->
         </div>
+        <button type="button" id="placeorder">Submit</button>
     </div>
 
+
     <script>
+        function incrementQuantity(item) {
+            updateItem(item, 1);
+        }
+
+        function decrementQuantity(item) {
+            updateItem(item, -1);
+        }
+
+        function updateItem(item, quantityChange) {
+            console.log(quantityChange);
+            fetch('<%= request.getContextPath() %>/cart/update-quantity/' + item.name + '?quantityChange=' + encodeURIComponent(quantityChange), {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => {
+                if(response.ok) {
+                    console.log("updated!");
+                    const quantityElement = document.getElementById(item.name);
+                    if (quantityElement) {
+                        currentQuantity = parseInt(quantityElement.textContent)
+                        quantityElement.textContent = currentQuantity + quantityChange;
+                    }
+                }
+            })
+            .catch(error => {
+                console.error("Error: ", error);
+                alert("Error while updating item quantity!");
+            });
+        }
+
         async function getCart() {
             try {
                 const response = await fetch('<%= request.getContextPath() %>/cart/view');
@@ -110,12 +160,18 @@
                 // Generate HTML for each cart item
                 const cardsHTML = itemList.map(item => {
                     console.log(item.name);
+                    ItemModel = JSON.stringify(item);
                     return `
                         <div class="card">
                             <div class="left">
                                 <h2>\${item.name}</h2>
                                 <p>Price: \$\${item.price.toFixed(2)}</p>
-                                <p>Quantity: \${item.quantity}</p>
+                                <div class="quantity-manager">
+                                    <p>Quantity: </p>
+                                    <button type="button" onclick='decrementQuantity(\${ItemModel})'>-</button>
+                                    <p id="\${item.name}">\${item.quantity}</p>
+                                    <button type="button" onclick='incrementQuantity(\${ItemModel})'>+</button>
+                                </div>
                             </div>
                             <div class="right">
                                 <img src="${pageContext.request.contextPath}/Files/\${item.image}" alt="\${item.name} Image">

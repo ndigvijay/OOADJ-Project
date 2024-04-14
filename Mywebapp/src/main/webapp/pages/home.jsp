@@ -55,6 +55,13 @@
             bottom: 0;
             width: 100%;
         }
+        .homeadmin {
+            max-width: 800px;
+            text-align: center;
+            margin: 20px auto;
+            color: blue;
+        }
+        
     </style>
 </head>
 <body>
@@ -71,6 +78,10 @@
             <p>Join us for breakfast and start your day with a delicious journey through Japanese cuisine!</p>
             <a href="/menu" class="cta-button">Order Now</a>
         </div>
+    </div>
+    <div class="homeadmin">
+        <a href="/admin/login">Are you an admin?</a> <br /> <br />
+        <a href="/admin/signup">Want to be admin?</a>
     </div>
 
     <footer>
