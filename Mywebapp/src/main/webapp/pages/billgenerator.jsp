@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generated Bill</title>
     <style>
+        /* Global Styles */
         body {
             font-family: Arial, sans-serif;
             background-color: #f7f7f7;
@@ -23,12 +24,15 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
+        /* Heading Styles */
         .heading {
             text-align: center;
             color: #333;
+            margin-bottom: 20px; /* Added margin for better separation */
         }
 
-        .bill-details {
+        /* Bill Details Styles */
+        #bill-details {
             margin-top: 20px;
         }
 
@@ -51,49 +55,103 @@
         .item-price {
             margin-left: 20px;
         }
+
+        /* Total Price Styles */
+        .total-price {
+            text-align: right; /* Align total price to the right */
+            font-size: 18px; /* Increase font size for emphasis */
+            font-weight: bold; /* Make total price bold */
+            margin-top: 20px; /* Add some space above the total price */
+            padding-top: 10px; /* Add padding for better spacing */
+            border-top: 1px solid #ddd; /* Add top border for separation */
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 class="heading">Generated Bill</h1>
-        <div class="bill-details">
-            <!-- Bill items will be appended here -->
-        </div>
+        <div id="billDetails">
+            </div>
     </div>
 
     <script>
-        // Get bill details from server-side
-        async function getBillDetails() {
+       
+       
+        let order={}
+        const orderId=localStorage.getItem("orderId")
+        async function generateBill(){
+
+            // alert(orderId)
             try {
-                const response = await fetch('<%= request.getContextPath() %>/bill/view');
-                const responseData = await response.text(); // Retrieve response as text
-                console.log(responseData); // Log response from server
-
-                // Parse response data as JSON
-                const data = JSON.parse(responseData);
-                console.log(data.billItems);
-
-                billItems = data.billItems;
-
-                // Generate HTML for each bill item
-                const billHTML = billItems.map(item => {
-                    return `
-                        <div class="bill-item">
-                            <div class="item-name">${item.name}</div>
-                            <div class="item-price">$${item.price.toFixed(2)}</div>
-                        </div>
-                    `;
-                }).join(''); // Join the array of HTML strings into a single string
-
-                // Append the generated HTML to the container
-                document.querySelector('.bill-details').innerHTML = billHTML;
-            } catch(error) {
-                console.log(error);
+                const responseOrderId=await fetch(`<%= request.getContextPath() %>/user/order/\${orderId}`)
+                const order=await responseOrderId.json()
+                // console.log(order)
+                // console.log(orderId)
+                // const response=await fetch(`<%= request.getContextPath() %>/user/order/\${orderId}`);
+                viewOrders
+               
+            } catch (error) {
+                
             }
+            
         }
+        function viewOrders(){
+        fetch('<%= request.getContextPath() %>/user/order/'+orderId)
+            .then(response => {
+                if (response.ok) {
+                    response.json()
+                    .then(order => {
+                        // console.log(order)
+                        // console.log(order.orderId)
+                        displayOrder(order);
+                    });
+                } else {
+                    alert('Failed to fetch orders');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while fetching orders');
+            });
+    }
 
-        // Call getBillDetails() after the DOM has fully loaded
-        window.onload = getBillDetails;
+
+
+    function helper(order){
+    return `
+        <p>\${order[0].items.map(item => `\${item.name}: \${item.quantity}`).join(', ')}</p>
+    `;
+}
+    const items=[]
+    function displayOrder(order){
+    const container = document.getElementById("billDetails");
+    let total = 0;
+
+    if (order.length > 0 && order[0].items && order[0].items.length > 0) {
+        const itemsHTML = order[0].items.map(item => {
+            const itemTotal = item.quantity * item.price;
+            total += itemTotal;
+            return `<p class="bill-item"><p class="item-name"> Item: \${item.name}</p> <p> Quantity: \${item.quantity}</p> <p> Price per unit: \${item.price}</p>  <p>Total Price: \${itemTotal}</p> </p>`;
+        }).join('');
+
+        container.innerHTML = itemsHTML;
+        container.innerHTML += `<p class="total-price">Total: \${total}</p>`;
+    } else {
+        container.innerHTML = "<p>No items found in the order.</p>";
+    }
+}
+
+
+
+   
+
+       // Call both functions when the window loads
+    window.onload = async function() {
+        await generateBill();
+        await viewOrders();
+        // await getBillDetails();
+    };
+
     </script>
 </body>
 </html>

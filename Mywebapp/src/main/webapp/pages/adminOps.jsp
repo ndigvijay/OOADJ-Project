@@ -149,12 +149,14 @@
     </form>
 
     <!-- View All Items -->
-    <div id="viewItemForm" class="form-group" onclick="viewItems()">
+    <div id="viewItemForm" class="form-group" >
         <h2>View All Items</h2>
-        <button type="button">View Items</button>
+        <button onclick="viewItems()">View Items</button>
 
         <!-- List to display all items -->
-<%--        <ul id="itemList" class="item-list" style="grid-column: span 5;"></ul>--%>
+        <ul id="itemList" class="item-list" style="grid-column: span 5;"></ul>
+
+
         <table id="itemTable">
             <thead>
             <tr>
@@ -179,6 +181,25 @@
         <button   onclick="getItem(event)">Get Item</button>
         <div id="itemDetails"></div>
     </form>
+   
+
+    <!-- View Orders -->
+    <div id="viewOrderForm" class="form-group" onclick="viewOrders()">
+        <h2>View Orders</h2>
+        <button type="button">View Orders</button>
+    </div>
+    <table id="orderTable">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>description</th>
+            </tr>
+        </thead>
+        <tbody id ="order"></tbody>
+    </table>
+    
+
+
 
 
 
@@ -222,6 +243,8 @@
         });
     }
 
+
+
     // Add Item
     function addItem(event) {
         event.preventDefault();
@@ -261,7 +284,7 @@
     function updateItem() {
         event.preventDefault();
         const itemId = document.getElementById('updateItemId').value;
-        console.log(itemId)
+        // console.log(itemId)
         const formData = {
             name: document.getElementById('newItemName').value,
             image: document.getElementById('newItemImage').value,
@@ -269,7 +292,7 @@
             category: document.getElementById('newItemCategory').value,
             quantity: parseInt(document.getElementById('newItemQuantity').value)
         };
-        console.log(formData);
+        // console.log(formData);
         fetch("<%= request.getContextPath() %>/admin/update-item?itemId="+itemId, {
             method: 'PUT',
             headers: {
@@ -346,6 +369,62 @@
                 alert('An error occurred while fetching item');
             });
     }
+
+    // async function viewOrders(){
+    //     const response= await fetch("<%= request.getContextPath() %>/admin/order")
+    //     const data = await response.json()
+    //     data.map(item=>{
+    //         // console.log(item)
+
+    //     })
+    // }
+    // Function to view all orders
+    function viewOrders(){
+        fetch('<%= request.getContextPath() %>/admin/order')
+            .then(response => {
+                if (response.ok) {
+                    response.json().
+                    then(orders => {
+                        displayOrders(orders);
+                    });
+                } else {
+                    alert('Failed to fetch orders');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while fetching orders');
+            });
+    }
+
+
+
+    function helper(order){
+    return `
+        <p>\${order.items.map(item => `\${item.name}: \${item.quantity}`).join(', ')}</p>
+    `;
+}
+
+    // Function to display orders in the table
+    function displayOrders(orders) {
+        const orderTable = document.getElementById('order');
+        orderTable.innerHTML = ''; // Clear previous data
+        
+        orders.forEach(order => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>\${order.orderId}</td>
+                <td>\${helper(order)}</td>                
+            `;
+            orderTable.appendChild(row);
+        });
+    }
+
+
+
+
+
+
 </script>
 </body>
 </html>
