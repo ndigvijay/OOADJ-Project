@@ -108,7 +108,7 @@
         <div id="cartContainer">
             <!-- Cards will be appended here -->
         </div>
-        <button type="button" id="placeorder">Submit</button>
+        <button  id="placeorder" onclick="placeOrder()" >Submit</button>
     </div>
 
 
@@ -121,8 +121,32 @@
             updateItem(item, -1);
         }
 
+
+        async function placeOrder(){
+            const response= await fetch('<%= request.getContextPath() %>/cart/view')
+            const data = await response.json()
+            const response1= await fetch('<%= request.getContextPath() %>/user/order', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: data
+            })
+            if(response1.ok){
+                alert("Order placed successfully");
+                const orderId = await response1.text();
+                // alert(orderId)
+                // // Store the JWT token in local storage
+                localStorage.setItem('orderId', orderId);
+                window.location.href = "/pages/billgenerator.jsp"; 
+            }
+            else{
+                alert("error order not saved")
+            }
+        }
+
+
+
         function updateItem(item, quantityChange) {
-            console.log(quantityChange);
+            // console.log(quantityChange);
             fetch('<%= request.getContextPath() %>/cart/update-quantity/' + item.name + '?quantityChange=' + encodeURIComponent(quantityChange), {
                 method: 'PATCH',
                 headers: {
@@ -131,7 +155,7 @@
             })
             .then(response => {
                 if(response.ok) {
-                    console.log("updated!");
+                    // console.log("updated!");
                     const quantityElement = document.getElementById(item.name);
                     if (quantityElement) {
                         currentQuantity = parseInt(quantityElement.textContent)
@@ -149,17 +173,17 @@
             try {
                 const response = await fetch('<%= request.getContextPath() %>/cart/view');
                 const responseData = await response.text(); // Retrieve response as text
-                console.log(responseData); // Log response from server
+                // console.log(responseData); // Log response from server
 
                 // Parse response data as JSON
                 const data = JSON.parse(responseData);
-                console.log(data.itemList);
+                // console.log(data.itemList);
 
                 itemList = data.itemList;
 
                 // Generate HTML for each cart item
                 const cardsHTML = itemList.map(item => {
-                    console.log(item.name);
+                    // console.log(item.name);
                     ItemModel = JSON.stringify(item);
                     return `
                         <div class="card">
@@ -183,7 +207,7 @@
                 // Append the generated HTML cards to the container
                 document.getElementById('cartContainer').innerHTML = cardsHTML;
             } catch(error) {
-                console.log(error);
+                // console.log(error);
             }
         }
 
