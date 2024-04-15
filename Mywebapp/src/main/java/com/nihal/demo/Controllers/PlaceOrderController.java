@@ -4,6 +4,10 @@ import com.nihal.demo.Models.CartModel;
 import com.nihal.demo.Models.OrderModel;
 import com.nihal.demo.Models.OrderStatus;
 import com.nihal.demo.Repository.OrderRepo;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -30,8 +34,7 @@ public class PlaceOrderController {
     }
 
 
-
-
+    public static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     @PostMapping("user/order")
     public ResponseEntity<String> placeOrder() {
         CartModel cart = cartService.viewCart();
@@ -40,15 +43,15 @@ public class PlaceOrderController {
         OrderModel savedOrder = orderRepo.save(orderFromCart);
 
         // Generate JWT token with order ID as payload
-        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-        String jwtToken = Jwts.builder()
-                .setSubject(savedOrder.getOrderId())
-                .setIssuedAt(new Date())
-                .signWith(key)
-                .compact();
+        
+        // String jwtToken = Jwts.builder()
+        //         .setSubject(savedOrder.getOrderId())
+        //         .setIssuedAt(new Date())
+        //         .signWith(key)
+        //         .compact();
 
-        return ResponseEntity.status(HttpStatus.CREATED).header("Authorization", "Bearer " + jwtToken)
-                .body("Order placed successfully");
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(savedOrder.getOrderId());
     }
     @GetMapping("user/order/{orderId}")
     public ResponseEntity<List<OrderModel>> viewOrder(@PathVariable String orderId){
@@ -64,4 +67,15 @@ public class PlaceOrderController {
         List<OrderModel> orders = orderRepo.findAll();
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(orders);
     }
+    @PostMapping("decodeToken")
+    public ResponseEntity<String> decodeToken(@RequestBody String jwtToken) {
+        Claims claims = Jwts.parserBuilder()
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(jwtToken)
+            .getBody();
+        String orderId = claims.getSubject();
+        return ResponseEntity.ok(orderId);
+    }
+        
 }
