@@ -180,7 +180,7 @@
                                         <button type="button" onclick='addItemToCart(\${ItemModel})'>Add to Cart</button>
                                     </div>
                                     <div class="right">
-                                        <img src="${pageContext.request.contextPath}/Files/\${item.image}" alt="\${item.name} Image">
+                                        <img src="\${item.image}" alt="\${item.name} Image">
                                     </div>
                                 </div>
                             `;
